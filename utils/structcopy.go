@@ -24,7 +24,7 @@ func MustUpdate(v reflect.Value, vDef reflect.Value) bool {
 // The "UpdateHeader" method uses "MustUpdate" to
 // update the fields of a struct from another struct
 // that have the same type
-func UpdateHeader(h interface{}, tmp interface{}) {
+func UpdateHeader(h any, tmp any) {
 	v := reflect.ValueOf(h).Elem()
 	vNew := reflect.ValueOf(tmp).Elem()
 	if v.Type() != vNew.Type() {

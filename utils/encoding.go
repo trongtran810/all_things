@@ -23,7 +23,7 @@ type MyType1 struct {
 }
 
 // Encode any struct to []byte
-func Cast(typ string, val uint64) interface{} {
+func Cast(typ string, val uint64) any {
 	switch typ {
 	case "byte":
 		return byte(val)
@@ -61,7 +61,7 @@ func encodeValue(v reflect.Value, buf *bytes.Buffer) {
 	}
 }
 
-func Bytes(v interface{}) []byte {
+func Bytes(v any) []byte {
 	buf := new(bytes.Buffer)
 	encodeValue(reflect.ValueOf(v), buf)
 	return buf.Bytes()

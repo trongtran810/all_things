@@ -9,7 +9,7 @@ import (
 )
 
 // Decode a byte slice into a struct
-func FromBytes(data []byte, v interface{}) error {
+func FromBytes(data []byte, v any) error {
 	buf := bytes.NewReader(data)
 	var ir io.Reader = buf
 	return decodeValue(reflect.ValueOf(v).Elem(), ir)
