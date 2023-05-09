@@ -1,0 +1,18 @@
+Record Type	CHAR	1
+Auxiliary type	CHAR	1
+Response request	CHAR	1
+spare	.BIN	1
+Transaction Number	.BIN	2
+Destination logical terminal number	.BIN	4
+Requesting logical terminal number	.BIN	4
+Response Data Size	.BIN	2
+Membership Number
+	Store number	.BIN	2
+	Logical Number	.BIN	4
+One	TwoOne	Four	Char	1	1
+		Five	Char	1	1
+		Six	Char	1	1
+	TwoTwo	Seven	Char	1	1
+		Eight	Char	1	1
+		Night	Char	1	1
+		Ten	Char	1	1
