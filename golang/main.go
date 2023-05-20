@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"tutorial/utils"
 )
 
@@ -15,13 +14,14 @@ type MyType1 struct {
 
 func main() {
 	// utils.WatchFileChange(`D:\TrongTran\meta-projects\.POSPRO\source\meta-vi.com\pospro\golang\test\data`)
-	utils.WatchFolderChange("")
+	// utils.WatchFolderChange("")
 	// utils.TestDecode()
 	// // Test Encoding
 	// utils.TestEncoding()
 	// fmt.Println(MyType1{a: 1, MyType2: MyType2{b: 2}})
 	// // Get local IP
-	// fmt.Println(utils.GetOutboundIP())
-	fmt.Println()
-	utils.WatchFileChange("D:\\TrongTran\\Job\\Reactjs\\golang\\test\\data\\watch_file_change_test.txt")
+	// // fmt.Println(utils.GetOutboundIP())
+	// fmt.Println()
+	// utils.WatchFileChange("D:\\TrongTran\\Job\\Reactjs\\golang\\test\\data\\watch_file_change_test.txt")
+	utils.DemoPointer()
 }

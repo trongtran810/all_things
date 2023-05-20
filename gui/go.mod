@@ -25,6 +25,7 @@ require (
 	github.com/stretchr/testify v1.8.0 // indirect
 	github.com/tevino/abool v1.2.0 // indirect
 	github.com/therecipe/qt v0.0.0-20200904063919-c0c124a5770d // indirect
+	github.com/therecipe/qt/internal/examples v0.0.0-20200904063919-c0c124a5770d // indirect
 	github.com/yuin/goldmark v1.4.13 // indirect
 	golang.org/x/image v0.3.0 // indirect
 	golang.org/x/mobile v0.0.0-20211207041440-4e6c2922fdee // indirect
