@@ -10,18 +10,24 @@ import (
 	"github.com/therecipe/qt/widgets"
 )
 
+type AddrOther struct {
+	one   string
+	two   string
+	three uint8
+}
 type Address struct {
 	Street  string
 	City    string
 	Country string
+	AddrOther
 }
 
 type Person struct {
 	Name    string
 	Age     int
-	Active  bool
-	Four    string
 	Address Address
+	Four    string
+	Active  bool
 }
 
 type WgMapping struct {
