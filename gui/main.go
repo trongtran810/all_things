@@ -38,7 +38,7 @@ type WgMapping struct {
 
 func CreateFilterFields(wgMapping *WgMapping) *widgets.QLineEdit {
 	filterInput := widgets.NewQLineEdit(nil)
-	filterInput.SetPlaceholderText("Filter by Name")
+	filterInput.SetPlaceholderText("Filter fields by Name")
 
 	// Apply the filter when the input changes
 	filterInput.ConnectTextChanged(func(text string) {
@@ -55,7 +55,6 @@ func CreateFilterFields(wgMapping *WgMapping) *widgets.QLineEdit {
 }
 
 func main() {
-	app := widgets.NewQApplication(len(os.Args), os.Args)
 	person := Person{
 		Name:   "John",
 		Age:    30,
@@ -68,6 +67,7 @@ func main() {
 		},
 	}
 
+	app := widgets.NewQApplication(len(os.Args), os.Args)
 	dialog := widgets.NewQDialog(nil, 0)
 	layout := widgets.NewQFormLayout(dialog)
 
@@ -78,8 +78,15 @@ func main() {
 		curKeyId:  0,
 	}
 	// Create the filter input
-	layout.AddRow3("Search:", CreateFilterFields(&wgMapping))
-
+	layout.AddRow5(CreateFilterFields(&wgMapping))
+	// Create a horizontal line (HR), add to layout
+	hr := widgets.NewQFrame(nil, 0)
+	hr.SetFrameShape(widgets.QFrame__HLine)
+	layout.AddWidget(hr)
+	// Create a horizontal line (HR), add to layout
+	hr1 := widgets.NewQFrame(nil, 1)
+	hr1.SetFrameShape(widgets.QFrame__HLine)
+	layout.AddWidget(hr1)
 	// Generate the input fields for the nested struct
 	generateInputFields(layout, person, &wgMapping)
 	for key := range wgMapping.rowLabels {
@@ -408,4 +415,43 @@ func outputData(layout *widgets.QFormLayout, data reflect.Value, wgMapping WgMap
 
 // 	v := reflect.ValueOf(&s).Elem()
 // 	PrintStructValue(v)
+// }
+
+// package main
+
+// import (
+// 	"os"
+
+// 	"github.com/therecipe/qt/widgets"
+// )
+
+// func main() {
+// 	app := widgets.NewQApplication(len(os.Args), os.Args)
+
+// 	// create a new widget
+// 	window := widgets.NewQWidget(nil, 0)
+
+// 	// create a vertical layout
+// 	layout := widgets.NewQVBoxLayout2(window)
+
+// 	// create a QLabel and add it to the layout
+// 	label := widgets.NewQLabel2("Above the line", nil, 0)
+// 	layout.AddWidget(label, 0, 0)
+
+// 	// create a QFrame, set it as a line, and add it to the layout
+// 	line := widgets.NewQFrame(nil, 0)
+// 	line.SetFrameShape(widgets.QFrame__HLine) // Horizontal line
+// 	line.SetFrameShadow(widgets.QFrame__Sunken)
+// 	layout.AddWidget(line, 0, 0)
+
+// 	// create another QLabel and add it to the layout
+// 	label2 := widgets.NewQLabel2("Below the line", nil, 0)
+// 	layout.AddWidget(label2, 0, 0)
+
+// 	// set layout to the window
+// 	window.SetLayout(layout)
+// 	window.Show()
+
+// 	// start the application
+// 	app.Exec()
 // }
