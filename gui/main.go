@@ -11,9 +11,7 @@ import (
 )
 
 type AddrOther struct {
-	one   string
-	two   string
-	three uint8
+	one string
 }
 type Address struct {
 	Street  string
@@ -89,9 +87,6 @@ func main() {
 	layout.AddWidget(hr1)
 	// Generate the input fields for the nested struct
 	generateInputFields(layout, person, &wgMapping)
-	for key := range wgMapping.rowLabels {
-		wgMapping.keyList = append(wgMapping.keyList, key)
-	}
 
 	// Add a submit button
 	submitButton := widgets.NewQPushButton2("Submit", nil)
@@ -128,6 +123,7 @@ func generateInputFields(layout *widgets.QFormLayout, data any, wgMapping *WgMap
 			wgInput := createInputWidget(fieldValue)
 			(*wgMapping).rowLabels[label] = wgInput
 			layout.AddRow(label, wgInput)
+			wgMapping.keyList = append(wgMapping.keyList, label)
 		}
 	}
 }
@@ -169,8 +165,8 @@ func outputData(layout *widgets.QFormLayout, data reflect.Value, wgMapping WgMap
 			// }
 			wg := widgets.NewQLineEditFromPointer(wgMapping.rowLabels[label].QWidget_PTR().Pointer())
 			fmt.Println(fieldName, "---", fieldValue, "---", wg.Text())
+			wgMapping.curKeyId++
 		}
-		wgMapping.curKeyId++
 	}
 }
 
