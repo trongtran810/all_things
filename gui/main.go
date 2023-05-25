@@ -8,7 +8,8 @@ import (
 	"strconv"
 	"strings"
 
-	_ "github.com/therecipe/qt/core"
+	"github.com/therecipe/qt/core"
+	"github.com/therecipe/qt/gui"
 	"github.com/therecipe/qt/widgets"
 )
 
@@ -141,7 +142,30 @@ func createInputWidget(fieldValue reflect.Value) widgets.QWidget_ITF {
 	// 	return input
 	default:
 		input := widgets.NewQLineEdit(nil)
-		input.SetText(fieldValue.String())
+		input.SetText(fmt.Sprintf("%v", fieldValue.Interface()))
+
+		tooltip := widgets.NewQWidget(nil, 0)
+		tooltip.SetWindowFlags(core.Qt__ToolTip | core.Qt__FramelessWindowHint)
+		tooltip.SetAttribute(core.Qt__WA_TranslucentBackground, true)
+		tooltip.SetAttribute(core.Qt__WA_ShowWithoutActivating, true)
+		tooltip.SetAttribute(core.Qt__WA_DeleteOnClose, true)
+		tooltipLayout := widgets.NewQVBoxLayout()
+		tooltipLayout.SetContentsMargins(5, 5, 5, 5)
+		tooltipContent := widgets.NewQLabel(nil, 0)
+		tooltipContent.SetStyleSheet("background-color: yellow;")
+		tooltipLayout.AddWidget(tooltipContent, 0, 0)
+		tooltip.SetLayout(tooltipLayout)
+
+		input.ConnectFocusInEvent(func(event *gui.QFocusEvent) {
+			tooltipContent.SetText(fieldValue.Type().String())
+			tooltip.Move(input.MapToGlobal(core.NewQPoint2(0, input.Height())))
+			tooltip.Show()
+		})
+
+		input.ConnectFocusOutEvent(func(event *gui.QFocusEvent) {
+			tooltip.Hide()
+		})
+
 		return input
 	}
 }
