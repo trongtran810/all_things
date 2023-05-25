@@ -1,9 +1,11 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"reflect"
+	"strconv"
 	"strings"
 
 	_ "github.com/therecipe/qt/core"
@@ -11,21 +13,21 @@ import (
 )
 
 type AddrOther struct {
-	one string
+	One uint8
 }
 type Address struct {
-	Street  string
-	City    string
-	Country string
+	Street  uint16
+	City    uint32
+	Country uint64
 	AddrOther
 }
 
 type Person struct {
-	Name    string
-	Age     int
+	Name    int8
+	Age     int16
 	Address Address
-	Four    string
-	Active  bool
+	Four    int32
+	Active  int64
 }
 
 type WgMapping struct {
@@ -56,14 +58,14 @@ func CreateFilterFields(wgMapping *WgMapping) *widgets.QLineEdit {
 
 func main() {
 	person := Person{
-		Name:   "John",
-		Age:    30,
-		Active: true,
-		Four:   "Trong",
+		Name:   1,
+		Age:    2,
+		Active: 3,
+		Four:   4,
 		Address: Address{
-			Street:  "123 Main Street",
-			City:    "New York",
-			Country: "USA",
+			Street:  5,
+			City:    6,
+			Country: 7,
 		},
 	}
 
@@ -97,6 +99,7 @@ func main() {
 	// Connect the submit button's clicked signal to output the inputted data
 	submitButton.ConnectClicked(func(_ bool) {
 		outputData(layout, reflect.ValueOf(&person).Elem(), wgMapping)
+		fmt.Println("person: ", person)
 		curKeyId = 0
 		fmt.Printf("submitted! %+v", wgMapping)
 	})
@@ -141,8 +144,6 @@ func createInputWidget(fieldValue reflect.Value) widgets.QWidget_ITF {
 		input.SetText(fieldValue.String())
 		return input
 	}
-
-	return nil
 }
 
 func outputData(layout *widgets.QFormLayout, data reflect.Value, wgMapping WgMapping) {
@@ -159,16 +160,96 @@ func outputData(layout *widgets.QFormLayout, data reflect.Value, wgMapping WgMap
 			outputData(layout, fieldValue, wgMapping)
 		} else {
 			label := wgMapping.keyList[curKeyId]
-			// wg := (*widgets.QLineEdit)(wgMapping.rowLabels[label].QWidget_PTR().Pointer())
-			// wgPtr := wgMapping.rowLabels[label].QWidget_PTR().Pointer()
-			// switch wgPtr.(type) {
-			// case *widgets.QLineEdit:
-			// 	fmt.Println("hih")
-			// }
 			wg := widgets.NewQLineEditFromPointer(wgMapping.rowLabels[label].QWidget_PTR().Pointer())
-			fmt.Println(fieldName, "---", fieldValue, "---", wg.Text())
+			data, err := ParseString(fieldValue.Interface(), wg.Text())
+			if err != nil {
+				return
+			}
+			fmt.Println(fieldName, "---", fieldValue, "---", wg.Text(), "----", data)
+			if fieldValue.CanSet() {
+				fieldValue.Set(reflect.ValueOf(data))
+			}
 			curKeyId++
 		}
+	}
+}
+
+func ParseString(i any, s string) (any, error) {
+	switch i.(type) {
+	case uint8:
+		data, err := strconv.ParseUint(s, 10, 64)
+		if err != nil {
+			return nil, err
+		}
+		return uint8(data), nil
+	case uint16:
+		data, err := strconv.ParseUint(s, 10, 64)
+		if err != nil {
+			return nil, err
+		}
+		return uint16(data), nil
+	case uint32:
+		data, err := strconv.ParseUint(s, 10, 64)
+		if err != nil {
+			return nil, err
+		}
+		return uint32(data), nil
+	case uint64:
+		data, err := strconv.ParseUint(s, 10, 64)
+		if err != nil {
+			return nil, err
+		}
+		return uint64(data), nil
+	case int8:
+		data, err := strconv.ParseInt(s, 10, 64)
+		if err != nil {
+			return nil, err
+		}
+		return int8(data), nil
+	case int16:
+		data, err := strconv.ParseInt(s, 10, 64)
+		if err != nil {
+			return nil, err
+		}
+		return int16(data), nil
+	case int32:
+		data, err := strconv.ParseInt(s, 10, 64)
+		if err != nil {
+			return nil, err
+		}
+		return int32(data), nil
+	case int64:
+		data, err := strconv.ParseInt(s, 10, 64)
+		if err != nil {
+			return nil, err
+		}
+		return int64(data), nil
+	case float32:
+		data, err := strconv.ParseFloat(s, 64)
+		if err != nil {
+			return nil, err
+		}
+		return float32(data), nil
+	case float64:
+		data, err := strconv.ParseFloat(s, 64)
+		if err != nil {
+			return nil, err
+		}
+		return float64(data), nil
+	case complex64:
+		data, err := strconv.ParseComplex(s, 64)
+		if err != nil {
+			return nil, err
+		}
+		return complex64(data), nil
+	case complex128:
+		data, err := strconv.ParseComplex(s, 64)
+		if err != nil {
+			return nil, err
+		}
+		return complex128(data), nil
+	default:
+		return nil, errors.New("unknown data type")
 	}
 }
 
