@@ -34,6 +34,8 @@ type WgMapping struct {
 	curKeyId  int
 }
 
+var curKeyId int
+
 func CreateFilterFields(wgMapping *WgMapping) *widgets.QLineEdit {
 	filterInput := widgets.NewQLineEdit(nil)
 	filterInput.SetPlaceholderText("Filter fields by Name")
@@ -94,8 +96,8 @@ func main() {
 
 	// Connect the submit button's clicked signal to output the inputted data
 	submitButton.ConnectClicked(func(_ bool) {
-		wgMapping.curKeyId = 0
 		outputData(layout, reflect.ValueOf(&person).Elem(), wgMapping)
+		curKeyId = 0
 		fmt.Printf("submitted! %+v", wgMapping)
 	})
 
@@ -156,7 +158,7 @@ func outputData(layout *widgets.QFormLayout, data reflect.Value, wgMapping WgMap
 		if fieldValue.Kind() == reflect.Struct {
 			outputData(layout, fieldValue, wgMapping)
 		} else {
-			label := wgMapping.keyList[wgMapping.curKeyId]
+			label := wgMapping.keyList[curKeyId]
 			// wg := (*widgets.QLineEdit)(wgMapping.rowLabels[label].QWidget_PTR().Pointer())
 			// wgPtr := wgMapping.rowLabels[label].QWidget_PTR().Pointer()
 			// switch wgPtr.(type) {
@@ -165,7 +167,7 @@ func outputData(layout *widgets.QFormLayout, data reflect.Value, wgMapping WgMap
 			// }
 			wg := widgets.NewQLineEditFromPointer(wgMapping.rowLabels[label].QWidget_PTR().Pointer())
 			fmt.Println(fieldName, "---", fieldValue, "---", wg.Text())
-			wgMapping.curKeyId++
+			curKeyId++
 		}
 	}
 }
